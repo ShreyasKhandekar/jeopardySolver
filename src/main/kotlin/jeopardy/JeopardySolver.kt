@@ -1,6 +1,8 @@
 package jeopardy
 
+import org.apache.lucene.store.FSDirectory
 import java.io.File
+import java.nio.file.Paths
 
 
 fun main(args: Array<String>){
@@ -11,16 +13,23 @@ fun main(args: Array<String>){
         printHelp()
     } else {
         if(args.contains("-r") || args.contains("--reindex") ||
-            !File("src/main/resources/index/").exists()) {
-            val fileList = mutableListOf<String>()
-
-            File("src/main/resources/wiki-subset/").walk().forEach {
-                fileList.add("$it")
-            }
-            fileList.removeAt(0) // First element is just the directory name
-            buildIndex(fileList)
+            !File(fullDatasetPath).exists()) {
+            buildFullIndex()
         }
+        val engine: QueryEngine = QueryEngine(FSDirectory.open(
+            Paths.get(indexFile)))
+
     }
+}
+
+fun buildFullIndex() {
+    val fileList = mutableListOf<String>()
+
+    File(fullDatasetPath).walk().forEach {
+        fileList.add("$it")
+    }
+    fileList.removeAt(0) // First element is just the directory name
+    buildIndex(fileList)
 }
 
 fun printHelp() {

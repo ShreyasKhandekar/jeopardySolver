@@ -15,8 +15,8 @@ import java.nio.file.Paths
 
 private fun addDocument(writer: IndexWriter, docName: String, docContent: String) {
     val doc = Document()
-    doc.add(StringField("title", docName, Field.Store.YES))
-    doc.add(TextField("content", docContent, Field.Store.YES))
+    doc.add(StringField(title, docName, Field.Store.YES))
+    doc.add(TextField(content, docContent, Field.Store.YES))
     writer.addDocument(doc)
 }
 
@@ -51,7 +51,7 @@ private fun parseDocuments(fileName: String, w: IndexWriter) {
 
 fun buildIndex(filePath: List<String>): Directory{
     val analyzer = StandardAnalyzer()
-    val indexFile = "src/main/resources/index"
+
     val index: Directory = FSDirectory.open(Paths.get(indexFile))
     val config = IndexWriterConfig(analyzer)
     val writer = IndexWriter(index, config)
