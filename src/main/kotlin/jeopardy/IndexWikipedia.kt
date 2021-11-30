@@ -42,18 +42,19 @@ private fun parseDocuments(fileName: String, w: IndexWriter) {
             // to our index at this point
             if (lastTitle != null) {
                 // We might have something to add
-
-                // Filter REDIRECT link only pages
-                if(contentAccumulator.trim().startsWith("#REDIRECT"))
-                    continue
-
-                println("$lastTitle\n" +
-                        "$sectionTitleAccumulator\n" +
-                        contentAccumulator
+                println(
+                    "$lastTitle\n" + "$sectionTitleAccumulator\n" +
+                            contentAccumulator
                 )
-
-                addDocument(w, lastTitle,
-                    sectionTitleAccumulator, contentAccumulator)
+                // Filter REDIRECT link only pages
+                if(!contentAccumulator.trim().startsWith("#REDIRECT")) {
+                    addDocument(
+                        w, lastTitle,
+                        sectionTitleAccumulator, contentAccumulator
+                    )
+                } else {
+                    System.err.println("Skipping Redirect file as above")
+                }
             } else if(contentAccumulator != "" ||
                     sectionTitleAccumulator != "") {
                 // This means we found content that does not belong to a title
@@ -78,6 +79,12 @@ private fun parseDocuments(fileName: String, w: IndexWriter) {
                 ).replace(
                     "[\\tpl]"," ")
 
+            // Filter for special characters like `&` which don't play nice
+            // with lucene
+            line.filterNot { c ->
+                c != '&' &&
+                c != '>' // TODO Add other characters that need to be escaped
+            }
             contentAccumulator += " $line"
         }
 

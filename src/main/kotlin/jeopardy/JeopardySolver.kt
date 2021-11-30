@@ -14,8 +14,8 @@ fun main(args: Array<String>){
     } else {
         if(args.contains("-r") || args.contains("--reindex") ||
             !File(indexFile).exists()) {
-            //buildFullIndex()
-            buildSampleIndex()
+            buildFullIndex()
+            //buildSampleIndex()
         }
         val engine: QueryEngine = QueryEngine(FSDirectory.open(
             Paths.get(indexFile)))
