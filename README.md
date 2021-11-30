@@ -40,6 +40,10 @@ At the outset, each wikipedia page contains at least one of the following:
 All pages and contents are stemmed and lemmatized using the Stanford CoreNLP
 Library
 
+TODO: Replace Standard Analyser in parseWikipedia.kt with whitespace analyser.
+
+Reason: After using coreNLP for lemmatization and pos and  ssplit we cannot use the stasndard analyser from lucene otherwise it will stem the words using its default porter stemmer. So we use whitespace analyser to not use stemmer. FIX QUICK.
+
 ## How the tiered index works
 
 ### Option1: 
