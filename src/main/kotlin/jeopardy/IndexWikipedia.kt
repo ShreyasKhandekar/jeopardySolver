@@ -1,5 +1,6 @@
 package jeopardy
 
+import nlp.tokenizeAndLemmatize
 import org.apache.lucene.analysis.standard.StandardAnalyzer
 import org.apache.lucene.document.Document
 import org.apache.lucene.document.Field
@@ -13,10 +14,14 @@ import java.io.File
 import java.nio.file.Paths
 
 
-private fun addDocument(writer: IndexWriter, docName: String, docContent: String) {
+private fun addDocument(writer: IndexWriter, docName: String,
+                        docSections: String, docContent: String) {
     val doc = Document()
     doc.add(StringField(title, docName, Field.Store.YES))
-    doc.add(TextField(content, docContent, Field.Store.YES))
+    doc.add(TextField(sections,
+        tokenizeAndLemmatize(docSections), Field.Store.YES))
+    doc.add(TextField(content,
+        tokenizeAndLemmatize(docContent), Field.Store.YES))
     writer.addDocument(doc)
 }
 
@@ -27,6 +32,7 @@ private fun parseDocuments(fileName: String, w: IndexWriter) {
 
     var lastTitle: String? = null
     var contentAccumulator = ""
+    var sectionTitleAccumulator = ""
 
     var line = reader.readLine()
     while(line != null) {
@@ -35,15 +41,45 @@ private fun parseDocuments(fileName: String, w: IndexWriter) {
             // This is the title for a new document, so we must add the last one
             // to our index at this point
             if (lastTitle != null) {
-                // We have something to add
-                println(lastTitle + "\n" + contentAccumulator)
-                addDocument(w, lastTitle, contentAccumulator)
-            } else if(contentAccumulator != "") {
-                throw IllegalStateException("Malformed Input")
+                // We might have something to add
+
+                // Filter REDIRECT link only pages
+                if(contentAccumulator.trim().startsWith("#REDIRECT"))
+                    continue
+
+                println("$lastTitle\n" +
+                        "$sectionTitleAccumulator\n" +
+                        contentAccumulator
+                )
+
+                addDocument(w, lastTitle,
+                    sectionTitleAccumulator, contentAccumulator)
+            } else if(contentAccumulator != "" ||
+                    sectionTitleAccumulator != "") {
+                // This means we found content that does not belong to a title
+                // because lastTitle is still null but content is not empty
+                throw IllegalStateException("Malformed Input. " +
+                        "Content without title")
             }
-            lastTitle = line
+
+            lastTitle = line.substring(2..line.length-3) // Remove [[ ]]
             contentAccumulator = ""
-        } else contentAccumulator += line
+
+        } else if (line.startsWith("==") && line.endsWith("==")) {
+            // This is a section Title
+            sectionTitleAccumulator += " ${line.removeSurrounding("==")}"
+        } else {
+            // This is a line of content
+
+            // Filter for [tpl] [/tpl]
+            line =
+                line.replace(
+                    "[tpl]"," "
+                ).replace(
+                    "[\\tpl]"," ")
+
+            contentAccumulator += " $line"
+        }
 
         line = reader.readLine()
     }

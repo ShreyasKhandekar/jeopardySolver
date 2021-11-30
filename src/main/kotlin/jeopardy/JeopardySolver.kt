@@ -13,13 +13,18 @@ fun main(args: Array<String>){
         printHelp()
     } else {
         if(args.contains("-r") || args.contains("--reindex") ||
-            !File(fullDatasetPath).exists()) {
-            buildFullIndex()
+            !File(indexFile).exists()) {
+            //buildFullIndex()
+            buildSampleIndex()
         }
         val engine: QueryEngine = QueryEngine(FSDirectory.open(
             Paths.get(indexFile)))
 
     }
+}
+
+fun buildSampleIndex() {
+    buildIndex(listOf(sampleDataPath))
 }
 
 fun buildFullIndex() {

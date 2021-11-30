@@ -35,6 +35,10 @@ At the outset, each wikipedia page contains at least one of the following:
   - There are some characters like `&` which just don't play nice with lucene.
   - In order to deal with them we just escape them using a backslash(`\ `)
 
+## Stemming and Lemmatization
+
+All pages and contents are stemmed and lemmatized using the Stanford CoreNLP
+Library
 
 ## How the tiered index works
 
