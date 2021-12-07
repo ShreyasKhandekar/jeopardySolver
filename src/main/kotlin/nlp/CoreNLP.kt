@@ -28,7 +28,7 @@ object CoreNLP {
         // annotate
         pipeline.annotate(document)
         return document.tokens().joinToString(" ") { tok -> tok.lemma() }
-
+        //return text
     }
 }
 
