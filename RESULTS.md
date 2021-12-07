@@ -20,6 +20,14 @@ Results from running the queries on different indices
 - Standard Analyser without Lemmatization on the whole document : 22%
 - English Analyser without Lemmatization on the whole document : 22%
 
-#### If Content Score above certain threshold (15) then return top answer
-else add section score
+#### If Content Score above certain threshold then return top answer
+else add section score 
+threshold for each type of index is in brackets
+
+- Standard Analyser with Lemmatization with only the first 15 lines(20) : 16%
+- Whitespace Analyser with Lemmatization with only the first 20 lines(17) : 21%
+- Whitespace Analyser without Lemmatization on the whole document(5) : 11%
+- Standard Analyser without Lemmatization on the whole document(15) : 28%
+- English Analyser without Lemmatization on the whole document(15): 28%
+
 
