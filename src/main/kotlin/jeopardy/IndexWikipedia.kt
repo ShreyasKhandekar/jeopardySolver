@@ -18,8 +18,7 @@ import java.nio.file.Paths
 
 private fun addDocument(writer: IndexWriter, docName: String,
                         docSections: String, docContent: String) {
-    if(docName.contains('['))
-        println("Adding Document $docName")
+
     val doc = Document()
     doc.add(StringField(title, docName, Field.Store.YES))
     doc.add(TextField(sections,

@@ -19,7 +19,7 @@ fun main(args: Array<String>){
         }
     }
     // Index should be ready for use now.
-    val index = FSDirectory.open(Paths.get(standardLemmaIndexFile))
+    val index = FSDirectory.open(Paths.get(whitespaceFullLemmaIndexFile))
     // See if we want to run tests
     if(args.contains("-t") || args.contains("--test")){
         // Run queries

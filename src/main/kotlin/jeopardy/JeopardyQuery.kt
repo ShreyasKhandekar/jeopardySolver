@@ -15,7 +15,7 @@ import org.apache.lucene.store.Directory
 fun searchFiles(index: Directory, querystr: String,
                 isBM25: Boolean = true): String? {
 
-    val analyzer = StandardAnalyzer()
+    val analyzer = WhitespaceAnalyzer()
     val qContent: Query = QueryParser(content, analyzer).parse(
         QueryParser.escape(tokenizeAndLemmatize(querystr)))
     val qSections: Query = QueryParser(sections, analyzer).parse(
@@ -39,7 +39,7 @@ fun searchFiles(index: Directory, querystr: String,
 
     // If content Score ALone is above a certain threshold
     // return now
-    if(docsContent.scoreDocs[0].score >=20)
+    if(docsContent.scoreDocs[0].score >=17)
         return searcher.doc(docsContent.scoreDocs[0].doc)[title]
 
 
