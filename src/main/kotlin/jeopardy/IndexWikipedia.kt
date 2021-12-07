@@ -1,6 +1,8 @@
 package jeopardy
 
-import nlp.tokenizeAndLemmatize
+import nlp.CoreNLP.tokenizeAndLemmatize
+import org.apache.lucene.analysis.core.WhitespaceAnalyzer
+import org.apache.lucene.analysis.en.EnglishAnalyzer
 import org.apache.lucene.analysis.standard.StandardAnalyzer
 import org.apache.lucene.document.Document
 import org.apache.lucene.document.Field
@@ -16,6 +18,8 @@ import java.nio.file.Paths
 
 private fun addDocument(writer: IndexWriter, docName: String,
                         docSections: String, docContent: String) {
+    if(docName.contains('['))
+        println("Adding Document $docName")
     val doc = Document()
     doc.add(StringField(title, docName, Field.Store.YES))
     doc.add(TextField(sections,
@@ -23,6 +27,9 @@ private fun addDocument(writer: IndexWriter, docName: String,
     doc.add(TextField(content,
         tokenizeAndLemmatize(docContent), Field.Store.YES))
     writer.addDocument(doc)
+//    println(" Title: ${doc.get(title)}")
+//    println("Sections:\n\t ${doc.get(sections)}")
+//    println("Content:\n\t ${doc.get(content)}")
 }
 
 @Throws(IllegalStateException::class)
@@ -37,15 +44,16 @@ private fun parseDocuments(fileName: String, w: IndexWriter) {
     var line = reader.readLine()
     while(line != null) {
         //println(line)
-        if(line.startsWith("[[") && line.endsWith("]]")){
+        if(line.startsWith("[[") && line.endsWith("]]")
+            && !line.startsWith("[[File:") && !line.startsWith("[[Image:")) {
             // This is the title for a new document, so we must add the last one
             // to our index at this point
             if (lastTitle != null) {
                 // We might have something to add
-                println(
-                    "$lastTitle\n" + "$sectionTitleAccumulator\n" +
-                            contentAccumulator
-                )
+//                println(
+//                    "$lastTitle\n" + "$sectionTitleAccumulator\n" +
+//                            contentAccumulator
+//                )
                 // Filter REDIRECT link only pages
                 if(!contentAccumulator.trim().startsWith("#REDIRECT")) {
                     addDocument(
@@ -53,22 +61,23 @@ private fun parseDocuments(fileName: String, w: IndexWriter) {
                         sectionTitleAccumulator, contentAccumulator
                     )
                 } else {
-                    System.err.println("Skipping Redirect file as above")
+                    //System.err.println("Skipping Redirect file as above")
                 }
             } else if(contentAccumulator != "" ||
                     sectionTitleAccumulator != "") {
                 // This means we found content that does not belong to a title
                 // because lastTitle is still null but content is not empty
-                throw IllegalStateException("Malformed Input. " +
-                        "Content without title")
+//                throw IllegalStateException("Malformed Input. " +
+//                        "Content without title")
             }
 
             lastTitle = line.substring(2..line.length-3) // Remove [[ ]]
             contentAccumulator = ""
+            sectionTitleAccumulator = ""
 
         } else if (line.startsWith("==") && line.endsWith("==")) {
             // This is a section Title
-            sectionTitleAccumulator += " ${line.removeSurrounding("==")}"
+            sectionTitleAccumulator += " ${line.filterNot{ c-> c=='=' }}"
         } else {
             // This is a line of content
 
@@ -77,29 +86,25 @@ private fun parseDocuments(fileName: String, w: IndexWriter) {
                 line.replace(
                     "[tpl]"," "
                 ).replace(
-                    "[\\tpl]"," ")
+                    "[/tpl]"," ")
 
-            // Filter for special characters like `&` which don't play nice
-            // with lucene
-            line.filterNot { c ->
-                c != '&' &&
-                c != '>' // TODO Add other characters that need to be escaped
-            }
             contentAccumulator += " $line"
         }
 
         line = reader.readLine()
     }
+
+    reader.close()
 }
 
-fun buildIndex(filePath: List<String>): Directory{
-    // TODO : replace with whitespace analyser.
-    val analyzer = StandardAnalyzer()
 
+fun buildIndex(filePath: List<String>): Directory{
+    val analyzer = WhitespaceAnalyzer()
     val index: Directory = FSDirectory.open(Paths.get(indexFile))
     val config = IndexWriterConfig(analyzer)
     val writer = IndexWriter(index, config)
     filePath.forEach {
+        println("Parsing $it")
         parseDocuments(it, writer)
     }
     writer.close()

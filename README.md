@@ -53,3 +53,8 @@ of the page.
 ### Option 2: 
 You can search both simultaneously and combine the two scores for a total score
 for the document.
+
+
+# Indexing times
+
+- WhitespaceAnalyzer, full files, no lemmatization - 50 minutes

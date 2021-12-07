@@ -17,8 +17,36 @@ fun main(args: Array<String>){
             buildFullIndex()
             //buildSampleIndex()
         }
-        val engine: QueryEngine = QueryEngine(FSDirectory.open(
-            Paths.get(indexFile)))
+    }
+    // Index should be ready for use now.
+    val index = FSDirectory.open(Paths.get(whitespaceLemmaIndexFile))
+    // See if we want to run tests
+    if(args.contains("-t") || args.contains("--test")){
+        // Run queries
+        var correctCount = 0
+        var totalCount = 0
+        val reader = File(questionsPath).bufferedReader()
+        var topic = reader.readLine()
+        while(topic != null) {
+            totalCount++
+            val question = reader.readLine()
+            val answer = reader.readLine()
+            val answers = answer.split("|")
+            if(jeopardyQuery(index,topic,question,answers,true))
+                correctCount++
+
+            topic = reader.readLine()
+            while(topic == "") {
+                topic = reader.readLine()
+            }
+        }
+
+        print("Total: $totalCount\nCorrect: $correctCount\nAccuracy:")
+        println(correctCount/totalCount.toDouble()*100)
+
+        reader.close()
+    } else if(args.contains("-p")){
+        // Run Accuracy Benchmarks
 
     }
 }
@@ -40,7 +68,7 @@ fun buildFullIndex() {
 fun printHelp() {
     println("-q | --query\t\t\t\tQuery Mode. Cannot be used with -p or -t")
     println("-r | --reindex\t\t\t\tReindex Files.")
-    println("-t | --test\t\t\t\t\tRun Sanity Tests. Cannot be used with -q or -p")
+    println("-t | --test\t\t\t\t\tRun Tests. Cannot be used with -q or -p")
     println("-p | --perf\t\t\t\t\tRun Accuracy Benchmarks. Cannot be used with -t or " +
             "-q")
     println("-s scoreFormula |\n--score scoreFormula\t\tSet Score formula to " +
