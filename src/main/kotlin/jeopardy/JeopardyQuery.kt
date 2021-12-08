@@ -1,9 +1,7 @@
 package jeopardy
 
 import nlp.CoreNLP.tokenizeAndLemmatize
-import org.apache.lucene.analysis.core.WhitespaceAnalyzer
 import org.apache.lucene.analysis.en.EnglishAnalyzer
-import org.apache.lucene.analysis.standard.StandardAnalyzer
 import org.apache.lucene.index.DirectoryReader
 import org.apache.lucene.index.IndexReader
 import org.apache.lucene.queryparser.classic.QueryParser
@@ -63,21 +61,23 @@ fun jeopardyQuery(
     isBM25: Boolean = true
 ): Boolean {
     var clue = ""
-    var concatQuery: String
+    val concatQuery: String
     if(topic.contains("(Alex:")){
-        val topicandclue = topic.split("(Alex:")
+        val topicAndClue = topic.split("(Alex:")
 
-        if(topicandclue[1].endsWith(')')){
-            clue = topicandclue[1].substringBeforeLast(')')
+        if(topicAndClue[1].endsWith(')')){
+            clue = topicAndClue[1].substringBeforeLast(')')
         }
-        concatQuery = "${topicandclue[0]} $clue $question"
+        concatQuery = "${topicAndClue[0]} $clue $question"
     } else
     concatQuery = "$topic $question"
 
     val ourAnswer = searchFiles(index, concatQuery, isBM25)
 
-    println("\n\nQuestion: $question\nQuery: $concatQuery\nAnswer: $ourAnswer\n" +
-            "Solution: ${answer.toString()}"
-    )
+    println("\n\nQuestion: $question\nQuery: $concatQuery\nAnswer: $ourAnswer")
+    if(answer.isEmpty())
+        println("Solution: Unknown")
+    else println("Solution: ${answer.toString()}")
+
     return answer.contains(ourAnswer)
 }
