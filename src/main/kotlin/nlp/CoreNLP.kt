@@ -23,12 +23,12 @@ object CoreNLP {
     }
 
     fun tokenizeAndLemmatize(text: String): String {
-        // create a document object
-        val document: CoreDocument = pipeline.processToCoreDocument(text)
-        // annotate
-        pipeline.annotate(document)
-        return document.tokens().joinToString(" ") { tok -> tok.lemma() }
-
+//        // create a document object
+//        val document: CoreDocument = pipeline.processToCoreDocument(text)
+//        // annotate
+//        pipeline.annotate(document)
+//        return document.tokens().joinToString(" ") { tok -> tok.lemma() }
+        return text
     }
 }
 

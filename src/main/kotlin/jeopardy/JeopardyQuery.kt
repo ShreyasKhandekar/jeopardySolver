@@ -1,7 +1,7 @@
 package jeopardy
 
 import nlp.CoreNLP.tokenizeAndLemmatize
-import org.apache.lucene.analysis.core.WhitespaceAnalyzer
+import org.apache.lucene.analysis.en.EnglishAnalyzer
 import org.apache.lucene.index.DirectoryReader
 import org.apache.lucene.index.IndexReader
 import org.apache.lucene.queryparser.classic.QueryParser
@@ -13,21 +13,21 @@ import org.apache.lucene.store.Directory
 fun searchFiles(index: Directory, querystr: String,
                 isBM25: Boolean = true): String? {
 
-    val analyzer = WhitespaceAnalyzer()
+    val analyzer = EnglishAnalyzer()
     val qContent: Query = QueryParser(content, analyzer).parse(
         QueryParser.escape(tokenizeAndLemmatize(querystr)))
-    val qSections: Query = QueryParser(content, analyzer).parse(
+    val qSections: Query = QueryParser(sections, analyzer).parse(
         QueryParser.escape(tokenizeAndLemmatize(querystr)))
 
     //println(querystr)
-    val hitsPerPage = 10 // Even though we care only about the top result we'll
-    //  calculate 10 results for performance analyses
+    val hitsPerPage = 20 // Even though we care only about the top result we'll
+    //  calculate 20 results for performance analyses
     val reader: IndexReader = DirectoryReader.open(index)
     val searcher = IndexSearcher(reader)
     if (!isBM25)
         searcher.similarity = ClassicSimilarity()
     val docsContent = searcher.search(qContent, hitsPerPage)
-    val docsSections = searcher.search(qContent, hitsPerPage)
+    val docsSections = searcher.search(qSections, hitsPerPage)
     // docs.scoreScore are the hits we got from the search
 
 //    println("Found " + docs.scoreDocs.size.toString() + " hits.")
@@ -35,9 +35,23 @@ fun searchFiles(index: Directory, querystr: String,
 //        println("${i + 1}. ${searcher.doc(it.doc)[title]}\t${searcher.doc(it.doc)[content]}")
 //    }
 
-    val totalScoreDocs = docsContent.scoreDocs
+    // If content Score ALone is above a certain threshold
+    // return now
+    if(docsContent.scoreDocs[0].score >=10)
+        return searcher.doc(docsContent.scoreDocs[0].doc)[title]
 
-    return searcher.doc(docsContent.scoreDocs[0].doc)[title]
+
+    // Else also incorporate sections score
+    val docsContentMap = docsContent.scoreDocs.associate { it.doc to it.score }
+    val docsSectionsMap =
+        docsSections.scoreDocs.associate { it.doc to it.score }
+    val unionMap = (docsContentMap.asSequence() + docsSectionsMap.asSequence())
+        .distinct()
+        .groupBy({ it.key }, { it.value })
+        .mapValues { (_, values) -> values.sum() }
+    val maxDoc = unionMap.maxByOrNull { it.value }
+
+    return searcher.doc(maxDoc!!.key)[title]
 }
 
 
@@ -46,11 +60,24 @@ fun jeopardyQuery(
     answer: List<String>,
     isBM25: Boolean = true
 ): Boolean {
-    val concatQuery = "$topic $question"
+    var clue = ""
+    val concatQuery: String
+    if(topic.contains("(Alex:")){
+        val topicAndClue = topic.split("(Alex:")
+
+        if(topicAndClue[1].endsWith(')')){
+            clue = topicAndClue[1].substringBeforeLast(')')
+        }
+        concatQuery = "${topicAndClue[0]} $clue $question"
+    } else
+    concatQuery = "$topic $question"
+
     val ourAnswer = searchFiles(index, concatQuery, isBM25)
 
-    println("\n\nQuestion: $question\nAnswer: $ourAnswer\n Solution: " +
-            answer.toString()
-    )
+    println("\n\nQuestion: $question\nQuery: $concatQuery\nAnswer: $ourAnswer")
+    if(answer.isEmpty())
+        println("Solution: Unknown")
+    else println("Solution: ${answer.toString()}")
+
     return answer.contains(ourAnswer)
 }
