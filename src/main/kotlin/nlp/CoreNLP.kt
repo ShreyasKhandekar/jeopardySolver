@@ -5,7 +5,14 @@ import edu.stanford.nlp.pipeline.StanfordCoreNLP
 import edu.stanford.nlp.simple.*
 import java.util.*
 
-
+/**
+ * Core NLP
+ * This object uses StanfordCoreNLP to lemmatize text. It uses the full API
+ * in order to annotate the text using tokenize, ssplit, pos, and lemma.
+ * It sets up all these pipelines only once since this is a slow process.
+ * The same pipeline can be used multiple times throughout the program.
+ * @constructor Create Core NLP Object and set up pipelines
+ */
 object CoreNLP {
     // set up pipeline properties
     private val props = Properties()
@@ -22,6 +29,12 @@ object CoreNLP {
         pipeline = StanfordCoreNLP(props)
     }
 
+    /**
+     * Tokenize and lemmatize
+     * Takes in a text and lemmatizes the function using CoreNLP
+     * @param text The text to lemmatize
+     * @return The lemmatized text
+     */
     fun tokenizeAndLemmatize(text: String): String {
 //        // create a document object
 //        val document: CoreDocument = pipeline.processToCoreDocument(text)
@@ -32,8 +45,20 @@ object CoreNLP {
     }
 }
 
-object NLP {
+/**
+ * Simple NLP
+ * It uses StanfordCoreNLP's Simple API to Lemmatize text
+ * @constructor Create empty Simple n l p
+ */
+object SimpleNLP {
 
+    /**
+     * Tokenize and lemmatize
+     * Takes in a text and lemmatizes the function using CoreNLP
+     * It only lemmatizes the first 15 sentences of the text that it is passed
+     * @param text The text to lemmatize
+     * @return The lemmatized text
+     */
     fun tokenizeAndLemmatize(text: String): String {
         // create a document object
         val doc = Document(text)

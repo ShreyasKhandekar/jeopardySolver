@@ -1,5 +1,6 @@
 package jeopardy
 
+
 const val indexFile = "src/main/resources/index"
 const val whitespaceIndexFile = "src/main/resources/index-WhitespaceFullFileNoLemma"
 const val standardIndexFile = "src/main/resources/index-StandardFullFileNoLemma"

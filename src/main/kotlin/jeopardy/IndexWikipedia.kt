@@ -31,7 +31,7 @@ private fun addDocument(writer: IndexWriter, docName: String,
 //    println("Content:\n\t ${doc.get(content)}")
 }
 
-@Throws(IllegalStateException::class)
+
 private fun parseDocuments(fileName: String, w: IndexWriter) {
 
     val reader = File(fileName).bufferedReader()
@@ -97,6 +97,14 @@ private fun parseDocuments(fileName: String, w: IndexWriter) {
 }
 
 
+/**
+ * Build index
+ * This function builds the Lucene index based on the files provided in the list
+ * These files contain Wikipedia Documents in the format described in
+ * [ShreyasKhandekar-ProjectFile.pdf]
+ * @param filePath The list of the paths of files which contain the documents
+ * @return the Lucene index that was built
+ */
 fun buildIndex(filePath: List<String>): Directory{
     val analyzer = EnglishAnalyzer()
     val index: Directory = FSDirectory.open(Paths.get(indexFile))

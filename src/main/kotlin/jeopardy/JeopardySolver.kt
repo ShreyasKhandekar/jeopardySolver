@@ -6,6 +6,13 @@ import java.nio.file.Paths
 import kotlin.system.exitProcess
 
 
+/**
+ * Main
+ * This is the main entry point for the code. It handles the parsing of
+ * arguments and runs the appropriate command based on what the user wants.
+ * Do learn how to use the flags because we assume the user is intelligent.
+ * @param args The command line arguments
+ */
 fun main(args: Array<String>){
     if(args.isEmpty()){
         printUsage()
@@ -66,10 +73,25 @@ fun main(args: Array<String>){
     }
 }
 
+/**
+ * Build sample index
+ * This function builds the Index of just the small sample of wikipedia articles
+ * contained in [resources/wiki-example.txt]
+ */
 fun buildSampleIndex() {
     buildIndex(listOf(sampleDataPath))
 }
 
+/**
+ * Score formula is BM25
+ * This function is for specifically handling the -s flag from the command
+ * line.
+ * It exits the program if the user inputs an unacceptable argument for
+ * the formula.
+ * @param args The command line arguments to the program
+ * @return true If the user wants the scoring formula to be BM25, false
+ *          if they want it to be tfidf.
+ */
 fun scoreFormulaIsBM25(args: Array<String>): Boolean {
     if(args.contains("-s") || args.contains("--score")){
         var s = args.indexOfFirst { it=="-s" }
@@ -89,6 +111,11 @@ fun scoreFormulaIsBM25(args: Array<String>): Boolean {
     return true
 }
 
+/**
+ * Build full index
+ * This function builds the Index of the full set of  wikipedia articles
+ * contained in [resources/wiki-subset/]
+ */
 fun buildFullIndex() {
     val fileList = mutableListOf<String>()
 
@@ -99,6 +126,11 @@ fun buildFullIndex() {
     buildIndex(fileList)
 }
 
+/**
+ * Print help
+ * Prints help for the flags of this program. Explains command line arguments
+ * and flag and what they mean, how to use them, and flag exclusivity.
+ */
 fun printHelp() {
     println("-q | --query\t\t\t\tQuery Mode. Cannot be used with -t")
     println("-r | --reindex\t\t\t\tReindex Files.")
@@ -111,6 +143,10 @@ fun printHelp() {
             "option")
 }
 
+/**
+ * Print usage
+ * Prints usage information
+ */
 fun printUsage() {
     println("Usage:\n\t JeopardySolver [-q] [-r]" +
             " [-t] [-s scoreFormula] [-h]")

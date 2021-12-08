@@ -10,25 +10,38 @@ import org.apache.lucene.search.Query
 import org.apache.lucene.search.similarities.ClassicSimilarity
 import org.apache.lucene.store.Directory
 
+/**
+ * Search files
+ * This function takes in a Lucene index, a query, and the scoring function, and
+ * returns the name of the top document based on the scoring strategy described
+ * in the program file.
+ * @param index The Lucene index
+ * @param querystr The query string to search for
+ * @param isBM25 If the scoring strategy is BM25, if false, we use tfidf
+ * @return The top document based on the scoring strategy described
+ */
 fun searchFiles(index: Directory, querystr: String,
                 isBM25: Boolean = true): String? {
 
     val analyzer = EnglishAnalyzer()
+    // To search content
     val qContent: Query = QueryParser(content, analyzer).parse(
         QueryParser.escape(tokenizeAndLemmatize(querystr)))
+    // To search sections
     val qSections: Query = QueryParser(sections, analyzer).parse(
         QueryParser.escape(tokenizeAndLemmatize(querystr)))
 
     //println(querystr)
     val hitsPerPage = 20 // Even though we care only about the top result we'll
-    //  calculate 20 results for performance analyses
+    //  calculate 20 results for combining the scores of content and sections
     val reader: IndexReader = DirectoryReader.open(index)
     val searcher = IndexSearcher(reader)
+    // Set scoring function to tfidf if we don't want to use BM25
     if (!isBM25)
         searcher.similarity = ClassicSimilarity()
     val docsContent = searcher.search(qContent, hitsPerPage)
     val docsSections = searcher.search(qSections, hitsPerPage)
-    // docs.scoreScore are the hits we got from the search
+    // docWhatever.scoreDocs are the hits we got from the search
 
 //    println("Found " + docs.scoreDocs.size.toString() + " hits.")
 //    docs.scoreDocs.forEachIndexed { i, it->
@@ -39,7 +52,9 @@ fun searchFiles(index: Directory, querystr: String,
     // return now
     if(docsContent.scoreDocs[0].score >=10)
         return searcher.doc(docsContent.scoreDocs[0].doc)[title]
-
+    // Note, for a threshold of 10, the EnglishAnalyzer index basically always
+    // returns now because it always finds a document with a score above 10 in
+    // the sample questions' dataset.
 
     // Else also incorporate sections score
     val docsContentMap = docsContent.scoreDocs.associate { it.doc to it.score }
@@ -55,6 +70,19 @@ fun searchFiles(index: Directory, querystr: String,
 }
 
 
+/**
+ * Jeopardy query
+ * This function is called when we are asked a jeopardy query.
+ * It uses the searchFiles function to carry out the search.
+ * Using the arguments, it constructs the qeury string and returns if we got the
+ * answer right.
+ * @param index The Lucene index
+ * @param topic The topic of the Jeopardy Question
+ * @param question The text of the question
+ * @param answer The answer to the question
+ * @param isBM25 The scoring strategy to use
+ * @return If the answering system answered correctly
+ */
 fun jeopardyQuery(
     index: Directory, topic: String, question: String,
     answer: List<String>,
@@ -77,7 +105,7 @@ fun jeopardyQuery(
     println("\n\nQuestion: $question\nQuery: $concatQuery\nAnswer: $ourAnswer")
     if(answer.isEmpty())
         println("Solution: Unknown")
-    else println("Solution: ${answer.toString()}")
+    else println("Solution: $answer")
 
     return answer.contains(ourAnswer)
 }
