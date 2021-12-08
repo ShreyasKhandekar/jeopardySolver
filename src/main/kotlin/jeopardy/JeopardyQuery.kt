@@ -15,7 +15,7 @@ import org.apache.lucene.store.Directory
 fun searchFiles(index: Directory, querystr: String,
                 isBM25: Boolean = true): String? {
 
-    val analyzer = WhitespaceAnalyzer()
+    val analyzer = EnglishAnalyzer()
     val qContent: Query = QueryParser(content, analyzer).parse(
         QueryParser.escape(tokenizeAndLemmatize(querystr)))
     val qSections: Query = QueryParser(sections, analyzer).parse(
@@ -39,7 +39,7 @@ fun searchFiles(index: Directory, querystr: String,
 
     // If content Score ALone is above a certain threshold
     // return now
-    if(docsContent.scoreDocs[0].score >=17)
+    if(docsContent.scoreDocs[0].score >=10)
         return searcher.doc(docsContent.scoreDocs[0].doc)[title]
 
 
@@ -62,11 +62,22 @@ fun jeopardyQuery(
     answer: List<String>,
     isBM25: Boolean = true
 ): Boolean {
-    val concatQuery = "$topic $question"
+    var clue = ""
+    var concatQuery: String
+    if(topic.contains("(Alex:")){
+        val topicandclue = topic.split("(Alex:")
+
+        if(topicandclue[1].endsWith(')')){
+            clue = topicandclue[1].substringBeforeLast(')')
+        }
+        concatQuery = "${topicandclue[0]} $clue $question"
+    } else
+    concatQuery = "$topic $question"
+
     val ourAnswer = searchFiles(index, concatQuery, isBM25)
 
-//    println("\n\nQuestion: $question\nAnswer: $ourAnswer\n Solution: " +
-//            answer.toString()
-//    )
+    println("\n\nQuestion: $question\nQuery: $concatQuery\nAnswer: $ourAnswer\n" +
+            "Solution: ${answer.toString()}"
+    )
     return answer.contains(ourAnswer)
 }

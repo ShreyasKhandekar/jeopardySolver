@@ -98,7 +98,7 @@ private fun parseDocuments(fileName: String, w: IndexWriter) {
 
 
 fun buildIndex(filePath: List<String>): Directory{
-    val analyzer = WhitespaceAnalyzer()
+    val analyzer = EnglishAnalyzer()
     val index: Directory = FSDirectory.open(Paths.get(indexFile))
     val config = IndexWriterConfig(analyzer)
     val writer = IndexWriter(index, config)

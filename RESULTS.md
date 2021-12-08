@@ -33,4 +33,5 @@ threshold for each type of index is in brackets
 - Standard Analyser without Lemmatization on the whole document(15) : 28%
 - English Analyser without Lemmatization on the whole document(15): 28%
 
-
+From here on I will just test the English Analyzer without lemmatization on the
+whole document because it performs the best across all the techniques for scoring.
