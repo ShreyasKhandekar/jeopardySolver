@@ -14,6 +14,8 @@ import org.apache.lucene.store.Directory
 import org.apache.lucene.store.FSDirectory
 import java.io.File
 import java.nio.file.Paths
+import kotlin.jvm.Throws
+import kotlin.IllegalStateException as KotlinIllegalStateException
 
 
 private fun addDocument(writer: IndexWriter, docName: String,
@@ -31,7 +33,7 @@ private fun addDocument(writer: IndexWriter, docName: String,
 //    println("Content:\n\t ${doc.get(content)}")
 }
 
-
+@Throws(KotlinIllegalStateException::class)
 private fun parseDocuments(fileName: String, w: IndexWriter) {
 
     val reader = File(fileName).bufferedReader()
@@ -43,7 +45,12 @@ private fun parseDocuments(fileName: String, w: IndexWriter) {
     var line = reader.readLine()
     while(line != null) {
         //println(line)
-        if(line.startsWith("[[") && line.endsWith("]]")
+        // Ignore Blank Lines
+        if(line.isBlank()) {
+            line = reader.readLine()
+            continue
+        }
+        else if(line.startsWith("[[") && line.endsWith("]]")
             && !line.startsWith("[[File:") && !line.startsWith("[[Image:")) {
             // This is the title for a new document, so we must add the last one
             // to our index at this point
@@ -66,8 +73,8 @@ private fun parseDocuments(fileName: String, w: IndexWriter) {
                     sectionTitleAccumulator != "") {
                 // This means we found content that does not belong to a title
                 // because lastTitle is still null but content is not empty
-//                throw IllegalStateException("Malformed Input. " +
-//                        "Content without title")
+                throw KotlinIllegalStateException("Malformed Input. " +
+                        "Content without title")
             }
 
             lastTitle = line.substring(2..line.length-3) // Remove [[ ]]

@@ -32,8 +32,12 @@ object CoreNLP {
     /**
      * Tokenize and lemmatize
      * Takes in a text and lemmatizes the function using CoreNLP
+     * Currently the function's lemmatization abilities have been commented out.
+     * So it just returns the text as it.
+     * This is because it is easier to enable and disable lemmatization by
+     * changing comments rather than changing code and calls to this function.
      * @param text The text to lemmatize
-     * @return The lemmatized text
+     * @return The lemmatized text (currently disabled so returns text as is)
      */
     fun tokenizeAndLemmatize(text: String): String {
 //        // create a document object

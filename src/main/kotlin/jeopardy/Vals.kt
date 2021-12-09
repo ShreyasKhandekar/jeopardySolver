@@ -10,6 +10,7 @@ const val standardLemmaIndexFile = "src/main/resources/index-StandardFirst15line
 const val englishIndexFile = "src/main/resources/index-EnglishFullFileNoLemma"
 const val fullDatasetPath = "src/main/resources/wiki-subset/"
 const val sampleDataPath = "src/main/resources/wiki-example.txt"
+const val problemDataPath = "src/main/resources/wiki-subset/enwiki-20140602-pages-articles.xml-0689.txt"
 const val questionsPath = "src/main/resources/questions.txt"
 const val title = "title"
 const val content = "content"
