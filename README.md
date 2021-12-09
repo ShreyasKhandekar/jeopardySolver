@@ -52,7 +52,7 @@ Wikipedia subset in [wiki-subset](src/main/resources/wiki-subset)
 ## Documentation
 
 You can find the documentation for the code under [target/dokka](target/dokka)
-Or click [here](target/dokka/index.html)
+Or click [here](https://rawgit.com/ShreyasKhandekar/jeopardySolver/main/target/dokka/index.html)
 
 In order to regenerate the docs run:
 
