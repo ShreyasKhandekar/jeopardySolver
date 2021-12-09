@@ -51,6 +51,24 @@ Wikipedia subset in [wiki-subset](src/main/resources/wiki-subset)
 - Standard Analyser without Lemmatization on the whole document : 1-5 minutes
 - English Analyser without Lemmatization on the whole document : 2-5 minutes
 
+## Getting the index
+
+Due to git lfs limitations, I cannot reliably provide access to the index that
+has already been generated using git.
+Even though I have made my best efforts to optimize my code it might still be
+hard to index if you do not have a decent machine.
+
+Therefore, you can access my best performing pre-generated index via box.
+
+Side Note: You can see how this index was created in the 
+[program file](ShreyasKhandekar-ProjectFile.pdf)
+
+You can download the index from box 
+[here](https://arizona.box.com/v/ShreyasKhandekarJeopardySolver)
+or copy and paste the following link 
+https://arizona.box.com/v/ShreyasKhandekarJeopardySolver 
+
+You must save it under `src/main/resources/` and call the folder `index`
 
 ## Documentation
 
