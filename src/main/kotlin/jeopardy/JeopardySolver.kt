@@ -76,7 +76,7 @@ fun main(args: Array<String>){
 /**
  * Build sample index
  * This function builds the Index of just the small sample of wikipedia articles
- * contained in [resources/wiki-example.txt]
+ * contained in [src/main/resources/wiki-example.txt]
  */
 fun buildSampleIndex() {
     buildIndex(listOf(sampleDataPath))
@@ -114,7 +114,7 @@ fun scoreFormulaIsBM25(args: Array<String>): Boolean {
 /**
  * Build full index
  * This function builds the Index of the full set of  wikipedia articles
- * contained in [resources/wiki-subset/]
+ * contained in [src/main/resources/wiki-subset/]
  */
 fun buildFullIndex() {
     val fileList = mutableListOf<String>()

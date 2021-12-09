@@ -35,3 +35,15 @@ mvn clean install
 ```
 
 Maven should handle all the dependencies for you automatically
+
+## Indexing Running time Expectations
+
+On a half decent machine here are some of the running times for indexing the
+Wikipedia subset in [wiki-subset](src/main/resources/wiki-subset)
+
+- Standard Analyser with Lemmatization with only the first 15 lines : 2-4 Hours
+- Whitespace Analyser with Lemmatization with only the first 20 lines : 2-4 Hours
+- Whitespace Analyser with Lemmatization on the whole document : 8-10 Hours
+- Whitespace Analyser without Lemmatization on the whole document : 1-5 minutes
+- Standard Analyser without Lemmatization on the whole document : 1-5 minutes
+- English Analyser without Lemmatization on the whole document : 2-5 minutes
