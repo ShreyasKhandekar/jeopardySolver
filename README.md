@@ -20,7 +20,6 @@ mvn clean install
 
 Maven should handle all the dependencies for you automatically
 
-
 ## How to run
 
 Due to limitations of the free version of git large file storage, I am unable to
@@ -29,6 +28,7 @@ provide a pre-compiled `jar` file via GitHub directly.
 Therefore, you can use maven to create the `jar` file as described above.
 
 Usage:
+
 ```bash
 java -jar target/jeopardySolver-1.0-jar-with-dependencies.jar  [-q] [-r] [-t] [-s scoreFormula] [-h]
 ```
@@ -37,7 +37,6 @@ For instructions on what each of the flags mean, run with the `-h` flag.
 
 This jar file also includes the Kotlin runtime, so you do not need Kotlin in
 order to be able to run the program.
-
 
 ## Indexing Running time Expectations
 
@@ -69,6 +68,23 @@ or copy and paste the following link
 https://arizona.box.com/v/ShreyasKhandekarJeopardySolver 
 
 You must save it under `src/main/resources/` and call the folder `index`
+
+### Troubleshooting
+
+If you are on a Unix based system then unfortunately the uploaded index might
+give you some grief. In case this happens you will have to re-index.
+
+Delete the existing index using 
+
+```bash
+rm -rf src/main/resources/index
+```
+
+And then reindex and test using
+
+```bash
+java -jar target/jeopardySolver-1.0-jar-with-dependencies.jar -r -t
+```
 
 ## Documentation
 
