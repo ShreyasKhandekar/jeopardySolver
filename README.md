@@ -10,10 +10,23 @@ In order to see the details of the project, the techniques used, and an analysis
 of the performance of the best results, see the project file pdf: 
 [ShreyasKhandekar-ProjectFile.pdf](ShreyasKhandekar-ProjectFile.pdf)
 
+## How to create the jar
+
+In order to make the `jar` file, you can use maven:
+
+```bash
+mvn clean install
+```
+
+Maven should handle all the dependencies for you automatically
+
+
 ## How to run
 
-The jar file is included in the target folder and can be run directly from the
-command line.
+Due to limitations of the free version of git large file storage, I am unable to
+provide a pre-compiled `jar` file via GitHub directly.
+
+Therefore, you can use maven to create the `jar` file as described above.
 
 Usage:
 ```bash
@@ -25,16 +38,6 @@ For instructions on what each of the flags mean, run with the `-h` flag.
 This jar file also includes the Kotlin runtime, so you do not need Kotlin in
 order to be able to run the program.
 
-
-## How to create new jar
-
-If you want to make changes to the project just to mess around,
-you can recompile the jar file using maven
-```bash
-mvn clean install
-```
-
-Maven should handle all the dependencies for you automatically
 
 ## Indexing Running time Expectations
 
