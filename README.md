@@ -47,3 +47,17 @@ Wikipedia subset in [wiki-subset](src/main/resources/wiki-subset)
 - Whitespace Analyser without Lemmatization on the whole document : 1-5 minutes
 - Standard Analyser without Lemmatization on the whole document : 1-5 minutes
 - English Analyser without Lemmatization on the whole document : 2-5 minutes
+
+
+## Documentation
+
+You can find the documentation for the code under [target/dokka](target/dokka)
+Or click [here](target/dokka/index.html)
+
+In order to regenerate the docs run:
+
+```bash
+mvn pre-site
+```
+
+Which will replace the existing docs with the regenerated ones.

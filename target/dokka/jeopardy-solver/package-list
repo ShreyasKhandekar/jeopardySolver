@@ -1,0 +1,24 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:jeopardy////PointingToDeclaration/jeopardy-solver/jeopardy/index.html
+$dokka.location:jeopardy/IndexWikipediaKt///PointingToDeclaration/jeopardy-solver/jeopardy/-index-wikipedia-kt/index.html
+$dokka.location:jeopardy/IndexWikipediaKt/buildIndex/#kotlin.collections.List[kotlin.String]/PointingToDeclaration/jeopardy-solver/jeopardy/-index-wikipedia-kt/build-index.html
+$dokka.location:jeopardy/JeopardyQueryKt///PointingToDeclaration/jeopardy-solver/jeopardy/-jeopardy-query-kt/index.html
+$dokka.location:jeopardy/JeopardyQueryKt/jeopardyQuery/#org.apache.lucene.store.Directory#kotlin.String#kotlin.String#kotlin.collections.List[kotlin.String]#kotlin.Boolean/PointingToDeclaration/jeopardy-solver/jeopardy/-jeopardy-query-kt/jeopardy-query.html
+$dokka.location:jeopardy/JeopardyQueryKt/searchFiles/#org.apache.lucene.store.Directory#kotlin.String#kotlin.Boolean/PointingToDeclaration/jeopardy-solver/jeopardy/-jeopardy-query-kt/search-files.html
+$dokka.location:jeopardy/JeopardySolverKt///PointingToDeclaration/jeopardy-solver/jeopardy/-jeopardy-solver-kt/index.html
+$dokka.location:jeopardy/JeopardySolverKt/buildFullIndex/#/PointingToDeclaration/jeopardy-solver/jeopardy/-jeopardy-solver-kt/build-full-index.html
+$dokka.location:jeopardy/JeopardySolverKt/buildSampleIndex/#/PointingToDeclaration/jeopardy-solver/jeopardy/-jeopardy-solver-kt/build-sample-index.html
+$dokka.location:jeopardy/JeopardySolverKt/main/#kotlin.Array[kotlin.String]/PointingToDeclaration/jeopardy-solver/jeopardy/-jeopardy-solver-kt/main.html
+$dokka.location:jeopardy/JeopardySolverKt/printHelp/#/PointingToDeclaration/jeopardy-solver/jeopardy/-jeopardy-solver-kt/print-help.html
+$dokka.location:jeopardy/JeopardySolverKt/printUsage/#/PointingToDeclaration/jeopardy-solver/jeopardy/-jeopardy-solver-kt/print-usage.html
+$dokka.location:jeopardy/JeopardySolverKt/scoreFormulaIsBM25/#kotlin.Array[kotlin.String]/PointingToDeclaration/jeopardy-solver/jeopardy/-jeopardy-solver-kt/score-formula-is-b-m25.html
+$dokka.location:jeopardy/ValsKt///PointingToDeclaration/jeopardy-solver/jeopardy/-vals-kt/index.html
+$dokka.location:nlp////PointingToDeclaration/jeopardy-solver/nlp/index.html
+$dokka.location:nlp/CoreNLP///PointingToDeclaration/jeopardy-solver/nlp/-core-n-l-p/index.html
+$dokka.location:nlp/CoreNLP/tokenizeAndLemmatize/#kotlin.String/PointingToDeclaration/jeopardy-solver/nlp/-core-n-l-p/tokenize-and-lemmatize.html
+$dokka.location:nlp/SimpleNLP///PointingToDeclaration/jeopardy-solver/nlp/-simple-n-l-p/index.html
+$dokka.location:nlp/SimpleNLP/tokenizeAndLemmatize/#kotlin.String/PointingToDeclaration/jeopardy-solver/nlp/-simple-n-l-p/tokenize-and-lemmatize.html
+jeopardy
+nlp
+
