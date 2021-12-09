@@ -57,7 +57,7 @@ Or click [here](https://rawgit.com/ShreyasKhandekar/jeopardySolver/main/target/d
 In order to regenerate the docs run:
 
 ```bash
-mvn pre-site
+mvn dokka:dokka
 ```
 
 Which will replace the existing docs with the regenerated ones.
